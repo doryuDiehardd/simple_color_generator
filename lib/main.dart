@@ -3,17 +3,16 @@ import 'dart:math';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ColorGenerator());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class ColorGenerator extends StatelessWidget {
+  const ColorGenerator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Generate your color',
       home: const MyHomePage(title: 'Color Generator app'),
     );
   }
@@ -46,21 +45,27 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _generateRGBColor() async {
+    final limit = 256;
     setState(() {
-      _r = Random().nextInt(256);
-      _g = Random().nextInt(256);
-      _b = Random().nextInt(256);
+      _r = Random().nextInt(limit);
+      _g = Random().nextInt(limit);
+      _b = Random().nextInt(limit);
     });
   }
   
-  void _generateHEXColor() {
+  void _generateHEXColor() async {
     setState(() {
-          _hex = Random().nextInt(16777217).toRadixString(16);
+      final limit = 16777217;
+      final radix = 16;
+      _hex = Random().nextInt(limit).toRadixString(radix);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    int _rgbT = 255;
+    int _hexT = 0xFFababab;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -81,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('RGB($_r, $_g, $_b)',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
+                        color: Color.fromARGB(_a, _rgbT-_r, _rgbT-_g, _rgbT-_b),
                         fontSize: _fontSize,
                         fontWeight: FontWeight.bold,
                         ),
@@ -100,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('HEX(#${_hex.toUpperCase()})',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(int.parse("0xFF$_hex")+0xFFababab),
+                        color: Color(int.parse("0xFF$_hex")+_hexT),
                         fontSize: _fontSize,
                         fontWeight: FontWeight.bold,
                         ),
@@ -123,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontSize: _fontSize,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
-                      color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
+                      color: Color.fromARGB(_a, _rgbT-_r, _rgbT-_g, _rgbT-_b),
                     ),
                   ),
                   Text(' there', 
@@ -132,13 +137,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontSize: _fontSize,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
-                      color: Color(int.parse("0xFF$_hex")+0xFFababab),
+                      color: Color(int.parse("0xFF$_hex")+_hexT),
                     ),
                   ),
                 ],
               ),
             ),
-        ],
+          ],
         ),
     );
   }
