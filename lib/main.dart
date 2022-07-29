@@ -11,9 +11,9 @@ class ColorGenerator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Color Generator app'),
+      home: MyHomePage(title: 'Color Generator app'),
     );
   }
 }
@@ -44,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void _generateRGBColor() async {
-    final limit = 256;
+  Future<void> _generateRGBColor() async {
+    const limit = 256;
     setState(() {
       _r = Random().nextInt(limit);
       _g = Random().nextInt(limit);
@@ -53,18 +53,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
   
-  void _generateHEXColor() async {
+  Future<void> _generateHEXColor() async {
     setState(() {
-      final limit = 16777217;
-      final radix = 16;
+      const limit = 16777217;
+      const radix = 16;
       _hex = Random().nextInt(limit).toRadixString(radix);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    int _rgbT = 255;
-    int _hexT = 0xFFababab;
+    const int _rgbT = 255;
+    const int _hexT = 0xFFababab;
 
     return Scaffold(
       appBar: AppBar(
@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: InkWell(
                   onTap: () => _generateRGBColor(),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 400),
                     color: Color.fromARGB(_a, _r, _g, _b),
                     child: Center(
                       child: Text('RGB($_r, $_g, $_b)',
