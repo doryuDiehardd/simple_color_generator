@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,8 +33,16 @@ class _MyHomePageState extends State<MyHomePage> {
   int _r = 255;
   int _g = 255;
   int _b = 255;
+  final double _fontSize = 18;
 
-  void _generateRGBColor() {
+
+  @override
+  void initState() {
+    _generateRGBColor();
+    super.initState();
+  }
+
+  void _generateRGBColor() async {
     setState(() {
       _r = Random().nextInt(256);
       _g = Random().nextInt(256);
@@ -57,7 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Hey there\nRGB($_r, $_g, $_b)',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18,
+                color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
+                fontSize: _fontSize,
                 fontWeight: FontWeight.bold,
                 ),
               ),
@@ -67,3 +76,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
