@@ -33,12 +33,15 @@ class _MyHomePageState extends State<MyHomePage> {
   int _r = 255;
   int _g = 255;
   int _b = 255;
+  String _hex = 0xFFFFFF.toString();
   final double _fontSize = 18;
+
 
 
   @override
   void initState() {
     _generateRGBColor();
+    _generateHEXColor();
     super.initState();
   }
 
@@ -49,6 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
       _b = Random().nextInt(256);
     });
   }
+  
+  void _generateHEXColor() {
+    setState(() {
+          _hex = Random().nextInt(16777217).toRadixString(16);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,23 +66,80 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: 
-        InkWell(
-          onTap: () => _generateRGBColor(),
-          child: Container(
-            color: Color.fromARGB(_a, _r, _g, _b),
-            child: Center(
-              child: Text('Hey there\nRGB($_r, $_g, $_b)',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
-                fontSize: _fontSize,
-                fontWeight: FontWeight.bold,
+        Stack(
+          children: [
+            Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => _generateRGBColor(),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    color: Color.fromARGB(_a, _r, _g, _b),
+                    child: Center(
+                      child: Text('RGB($_r, $_g, $_b)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
+                        fontSize: _fontSize,
+                        fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
+              Expanded(
+                child: InkWell(
+                  onTap: () => _generateHEXColor(),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 400),
+                    color: Color(int.parse("0xFF$_hex")),
+                    child: Center(
+                      child: Text('HEX(#${_hex.toUpperCase()})',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(int.parse("0xFF$_hex")+0xFFababab),
+                        fontSize: _fontSize,
+                        fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ],
             ),
-          ),
-      ),
+            Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text('Hey  ', 
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontSize: _fontSize,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      color: Color.fromARGB(_a, 255-_r, 255-_g, 255-_b),
+                    ),
+                  ),
+                  Text(' there', 
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: _fontSize,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      color: Color(int.parse("0xFF$_hex")+0xFFababab),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+        ),
     );
   }
 }
-
