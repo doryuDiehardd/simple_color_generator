@@ -1,33 +1,18 @@
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const ColorGenerator());
-}
-
-class ColorGenerator extends StatelessWidget {
-  const ColorGenerator({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Color Generator app'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   int _a = 255;
   int _r = 255;
   int _g = 255;
@@ -35,17 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String _hex = 0xFFFFFF.toString();
   final double _fontSize = 18;
 
-
-
-  @override
-  void initState() {
-    _generateRGBColor();
-    _generateHEXColor();
-    super.initState();
-  }
-
-  Future<void> _generateRGBColor() async {
-    const limit = 256;
+  void _generateRGBColor() {
+    const int limit = 256;
     setState(() {
       _r = Random().nextInt(limit);
       _g = Random().nextInt(limit);
@@ -53,9 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
   
-  Future<void> _generateHEXColor() async {
+  void _generateHEXColor() {
     setState(() {
-      const limit = 16777217;
+      const int limit = 0xffffff;
       const radix = 16;
       _hex = Random().nextInt(limit).toRadixString(radix);
     });
@@ -78,12 +54,13 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Expanded(
                 child: InkWell(
+                  key: const Key('rgbInkWell'),
                   onTap: () => _generateRGBColor(),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     color: Color.fromARGB(_a, _r, _g, _b),
                     child: Center(
-                      child: Text('RGB($_r, $_g, $_b)',
+                      child: Text('\n\nRGB($_r, $_g, $_b)',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color.fromARGB(_a, _rgbT-_r, _rgbT-_g, _rgbT-_b),
@@ -97,12 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: InkWell(
+                  key: const Key('hexInkWell'),
                   onTap: () => _generateHEXColor(),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     color: Color(int.parse("0xFF$_hex")),
                     child: Center(
-                      child: Text('HEX(#${_hex.toUpperCase()})',
+                      child: Text('\n\nHEX(#${_hex})',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(int.parse("0xFF$_hex")+_hexT),
