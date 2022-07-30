@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:simple_color_generator/widgets/home_page.dart';
 
-import 'home_page.dart';
-
+///Root class of 'simple color generator' app
 class ColorGenerator extends StatelessWidget {
   const ColorGenerator({Key? key}) : super(key: key);
 

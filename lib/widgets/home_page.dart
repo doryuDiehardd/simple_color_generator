@@ -1,46 +1,29 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
+import 'package:simple_color_generator/utils/hex_generator.dart';
+import 'package:simple_color_generator/utils/rgb_generator.dart';
+///Home page of 'simple color generator' app
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
-
+  
   final String title;
+
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _a = 255;
+  final int _a = 255;
   int _r = 255;
   int _g = 255;
   int _b = 255;
   String _hex = 0xFFFFFF.toString();
   final double _fontSize = 18;
 
-  void _generateRGBColor() {
-    const int limit = 256;
-    setState(() {
-      _r = Random().nextInt(limit);
-      _g = Random().nextInt(limit);
-      _b = Random().nextInt(limit);
-    });
-  }
-  
-  void _generateHEXColor() {
-    setState(() {
-      const int limit = 0xffffff;
-      const radix = 16;
-      _hex = Random().nextInt(limit).toRadixString(radix);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     const int _rgbT = 255;
-    const int _hexT = 0xFFababab;
+    const int _hexT = 0xFFbfbfbf;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,48 +33,64 @@ class _HomePageState extends State<HomePage> {
         Stack(
           children: [
             Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: InkWell(
-                  key: const Key('rgbInkWell'),
-                  onTap: () => _generateRGBColor(),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 400),
-                    color: Color.fromARGB(_a, _r, _g, _b),
-                    child: Center(
-                      child: Text('\n\nRGB($_r, $_g, $_b)',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color.fromARGB(_a, _rgbT-_r, _rgbT-_g, _rgbT-_b),
-                        fontSize: _fontSize,
-                        fontWeight: FontWeight.bold,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      final List<int> list = RgbGenerator.rgbGenerator();
+                      setState((){
+                        _r = list[0];
+                        _g = list[1];
+                        _b = list[2];
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      color: Color.fromARGB(_a, _r, _g, _b),
+                      child: Center(
+                        child: Text('\n\nRGB($_r, $_g, $_b)',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromARGB(_a, _rgbT-_r, _rgbT-_g, _rgbT-_b),
+                          fontSize: _fontSize,
+                          fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: InkWell(
-                  key: const Key('hexInkWell'),
-                  onTap: () => _generateHEXColor(),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 400),
-                    color: Color(int.parse("0xFF$_hex")),
-                    child: Center(
-                      child: Text('\n\nHEX(#${_hex})',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(int.parse("0xFF$_hex")+_hexT),
-                        fontSize: _fontSize,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      final int hex = int.parse("0x$_hex");
+                      if(hex.isEven){
+                        setState((){
+                          _hex = HexGenerator.hexGeneratorA();
+                        });
+                      }else{
+                        setState((){
+                          _hex = HexGenerator.hexGeneratorB();
+                        });
+                      }
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      color: Color(int.parse("0xFF$_hex")),
+                      child: Center(
+                        child: Text('\n\nHEX(#${_hex})',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(int.parse("0xFF$_hex")+_hexT),
+                          fontSize: _fontSize,
+                          fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
               ],
             ),
             Center(
