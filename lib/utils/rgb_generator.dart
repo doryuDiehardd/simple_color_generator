@@ -6,11 +6,15 @@ class RgbGenerator{
   static List<int> rgbGenerator(){
     final List<int> list = [];
     const int limit = 256;
-    list.add(Random().nextInt(limit));
-    list.add(Random().nextInt(limit));
-    list.add(Random().nextInt(limit));
+    int seed;
+    
+    seed = DateTime.now().microsecondsSinceEpoch;
+    list.add(Random(seed).nextInt(limit));
+    seed = DateTime.now().microsecondsSinceEpoch;
+    list.add(Random(seed*seed).nextInt(limit));
+    seed = DateTime.now().millisecondsSinceEpoch;
+    list.add(Random(seed+seed).nextInt(limit));
 
     return list;
   }
 }
-

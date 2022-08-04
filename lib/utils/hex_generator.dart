@@ -7,7 +7,7 @@ class HexGenerator{
     const int limit = 0xffffff;
     const radix = 16;
 
-    return Random().nextInt(limit).toRadixString(radix);
+    return Random(DateTime.now().microsecondsSinceEpoch).nextInt(limit).toRadixString(radix);
   }
   ///Generates HEX color number step by step.
   static String hexGeneratorB(){
@@ -16,7 +16,7 @@ class HexGenerator{
     const int lenght = 6;
     String hex = '';
     for (var i = 0; i < lenght; i++) {
-      hex += Random().nextInt(limit).toRadixString(radix);
+      hex += Random(DateTime.now().microsecondsSinceEpoch*i).nextInt(limit).toRadixString(radix);
     }
 
     return hex;
